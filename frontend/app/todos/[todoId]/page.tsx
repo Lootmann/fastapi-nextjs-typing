@@ -1,6 +1,8 @@
 import React from "react";
 import { Todo } from "../../../typings";
 
+export const dynamicParams = true;
+
 type PageProps = {
   params: {
     todoId: string;
@@ -34,3 +36,15 @@ async function TodoPage({ params: { todoId } }: PageProps) {
 }
 
 export default TodoPage;
+
+export async function generateStaticParams() {
+  const res = await fetch(`http://localhost:8888/todos/`);
+  const todos: Todo[] = await res.json();
+
+  // get only first 10 pages
+  const trimmedTodos = todos.splice(0, 10);
+
+  return trimmedTodos.map((todo) => ({
+    todoId: todo.id.toString(),
+  }));
+}

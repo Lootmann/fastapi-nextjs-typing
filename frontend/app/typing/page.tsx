@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { Problem } from "../../typings";
 
@@ -12,12 +13,17 @@ async function Typing() {
 
   return (
     <div className="text-2xl p-4">
-      <h2 className="text-xl">Problems</h2>
+      <h2 className="text-xl mb-2">Problems</h2>
 
-      <ul>
+      <ul className="flex flex-col gap-2">
         {problems.map((problem) => (
-          <li key={problem.id} className="text-lg">
-            {problem.id}. {problem.sentence.substring(0, 50)}
+          <li
+            key={problem.id}
+            className="text-lg bg-slate-400 hover:bg-slate-200 px-2 py-1 rounded-md"
+          >
+            <Link href={`/typing/${problem.id}`}>
+              {problem.id}. {problem.sentence.substring(0, 50)}
+            </Link>
           </li>
         ))}
       </ul>

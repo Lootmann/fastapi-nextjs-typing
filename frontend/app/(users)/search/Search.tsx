@@ -14,12 +14,13 @@ function Search() {
   };
 
   return (
-    <form onSubmit={handleSearch}>
+    <form onSubmit={handleSearch} className="flex gap-2">
       <input
         type="text"
         value={search}
         placeholder="Enter the Search Form"
         onChange={(e) => setSearch(e.target.value)}
+        className="text-md p-2 bg-slate-200"
       />
       <button
         type="submit"

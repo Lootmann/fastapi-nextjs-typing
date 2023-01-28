@@ -8,6 +8,10 @@ export default function RootLayout({
 }) {
   return (
     <html>
+      <head>
+        <title>NextJs Tutorial</title>
+      </head>
+
       <body>
         <Header />
         {children}

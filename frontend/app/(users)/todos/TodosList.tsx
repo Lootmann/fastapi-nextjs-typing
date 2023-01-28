@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { Todo } from "../../typings";
+import { Todo } from "../../../typings";
 
 async function fetchTodos() {
   const res = await fetch("http://127.0.0.1:8888/todos");

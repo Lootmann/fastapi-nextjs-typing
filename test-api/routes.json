@@ -1,4 +1,0 @@
-{
-  "/todos": "/todos",
-  "/todos/:user": "/todos?userid=:userid"
-}

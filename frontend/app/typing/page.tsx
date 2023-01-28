@@ -8,25 +8,28 @@ async function getProblems() {
   return res.json();
 }
 
+function truncate(sentence: string) {
+  return sentence.length > 60 ? sentence.substring(0, 60) + "..." : sentence;
+}
+
 async function Typing() {
   const problems: Problem[] = await getProblems();
 
   return (
     <div className="text-2xl p-4">
-      <h2 className="text-xl mb-2">Problems</h2>
+      <h2 className="text-xl text-white mb-2">Sentence List</h2>
 
-      <ul className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         {problems.map((problem) => (
-          <li
-            key={problem.id}
-            className="text-lg bg-slate-400 hover:bg-slate-200 px-2 py-1 rounded-md"
+          <Link
+            href={`/typing/${problem.id}`}
+            className="text-white hover:bg-cyan-800 rounded-md pl-2"
           >
-            <Link href={`/typing/${problem.id}`}>
-              {problem.id}. {problem.sentence.substring(0, 50)}
-            </Link>
-          </li>
+            {problem.id}. ({problem.sentence.length}){" "}
+            {truncate(problem.sentence)}
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

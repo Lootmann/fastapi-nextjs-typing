@@ -17,9 +17,14 @@ async function TypingGame({ params: { problemId } }: PageProps) {
   const problem = await fetchProblem(problemId);
 
   return (
-    <div className="text-2xl p-4">
-      <h2 className="text-xl mb-2">Problems {problem.id}</h2>
-      <p>{problem.sentence}</p>
+    <div className="w-2/3 mx-auto mt-4 flex flex-col gap-4 text-white">
+      <div className="p-4 border-2 border-slate-600 rounded-md">
+        <p className="text-xl">Count :</p>
+      </div>
+
+      <div className="p-4 border-2 border-slate-300 rounded-md">
+        <p className="text-2xl">{problem.sentence}</p>
+      </div>
     </div>
   );
 }

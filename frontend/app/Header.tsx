@@ -12,17 +12,10 @@ function Header() {
       </Link>
 
       <Link
-        href="/todos"
+        href="/typing"
         className="px-2 py-1 bg-white text-blue-700 text-xl hover:font-bold rounded-md"
       >
-        TodosList
-      </Link>
-
-      <Link
-        href="/search"
-        className="px-2 py-1 bg-white text-blue-700 text-xl hover:font-bold rounded-md"
-      >
-        Search
+        Typing
       </Link>
     </header>
   );

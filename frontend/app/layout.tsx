@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html>
       <head>
-        <title>NextJs Tutorial</title>
+        <title>Typing Game</title>
       </head>
 
       <body>

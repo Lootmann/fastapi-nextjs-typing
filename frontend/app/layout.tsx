@@ -12,7 +12,7 @@ export default function RootLayout({
         <title>Typing Game</title>
       </head>
 
-      <body>
+      <body className="bg-slate-800">
         <Header />
         {children}
       </body>

@@ -1,6 +1,4 @@
-export type Todo = {
-  userId: number;
+export type Problem = {
   id: number;
-  title: string;
-  completed: boolean;
+  sentence: string;
 };

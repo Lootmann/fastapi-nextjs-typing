@@ -3,7 +3,7 @@ import React from "react";
 function head() {
   return (
     <>
-      <title>The Search Page</title>
+      <title>Choose Typing Sentence</title>
     </>
   );
 }

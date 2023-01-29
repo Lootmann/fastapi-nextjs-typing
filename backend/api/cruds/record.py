@@ -4,38 +4,42 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import api.models.record as record_model
-import api.schemas.record as record_scheme
+from api.models.record import Record
+from api.schemas import record as schema
 
 
-async def get_all_records(db: AsyncSession) -> List[record_model.Record]:
+async def get_all_records(db: AsyncSession) -> List[Record]:
     result: Result = await (
         db.execute(
             select(
-                record_model.Record.id,
-                record_model.Record.actual_typing,
-                record_model.Record.duration,
-                record_model.Record.registered_at,
+                Record.id,
+                Record.duration,
+                Record.registered_at,
+                Record.problem_id,
             )
         )
     )
     return result.all()  # type: ignore
 
 
-async def get_record(db: AsyncSession, record_id: int) -> record_model.Record | None:
-    result: Result = await db.execute(
-        select(record_model.Record).filter(record_model.Record.id == record_id)
-    )
-
-    record: record_model.Record | None = result.first()
-
+async def get_record(db: AsyncSession, record_id: int) -> Record | None:
+    result: Result = await db.execute(select(Record).filter(Record.id == record_id))
+    record: Record | None = result.first()  # type: ignore
     return record[0] if record else None
 
 
-async def create_record(
-    db: AsyncSession, record_create: record_scheme.RecordCreate
-) -> record_model.Record:
-    record = record_model.Record(**record_create.dict())
+async def get_records_by_problem_id(db: AsyncSession, problem_id: int) -> List[Record] | None:
+    result: Result = await db.execute(
+        select(Record.id, Record.duration, Record.registered_at, Record.problem_id).filter(
+            Record.problem_id == problem_id
+        )
+    )
+
+    return result.all()  # type: ignore
+
+
+async def create_record(db: AsyncSession, record_create: schema.RecordCreate) -> Record:
+    record = Record(**record_create.dict())
     db.add(record)
 
     await db.commit()
@@ -44,6 +48,6 @@ async def create_record(
     return record
 
 
-async def delete_record(db: AsyncSession, original: record_model.Record):
+async def delete_record(db: AsyncSession, original: Record):
     await db.delete(original)
     await db.commit()

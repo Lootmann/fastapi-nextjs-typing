@@ -21,8 +21,10 @@ function TypingGame({ params: { problemId } }: PageProps) {
   const [sentence, setSentence] = React.useState<string>("");
   // for adding bolded, colored sentence
   const [showSentence, setShowSentence] = React.useState<string>("");
-  const ref = React.useRef(null);
+  const ref = React.useRef(pos);
   ref.current = pos;
+
+  const [info, setInfo] = React.useState<string>("init");
 
   // manage to sentence, EventListener loading order.
   const [isDone, setIsDone] = React.useState<boolean>(false);
@@ -32,7 +34,6 @@ function TypingGame({ params: { problemId } }: PageProps) {
 
   // run in once
   React.useEffect(() => {
-    console.log("*** init: fetch");
     fetch(`http://127.0.0.1:8000/problems/${problemId}`)
       .then((res) => {
         return res.json();
@@ -48,7 +49,6 @@ function TypingGame({ params: { problemId } }: PageProps) {
   React.useEffect(() => {
     // adjust fetch order
     if (!isDone) return;
-    console.log("*** ref.current");
 
     window.addEventListener("keydown", (e: any) => typingEvent(e));
 
@@ -57,12 +57,21 @@ function TypingGame({ params: { problemId } }: PageProps) {
     };
   }, [isDone]);
 
+  // End Game
+  React.useEffect(() => {
+    if (info != "init" && sentence.length <= pos) {
+      setInfo("Clear");
+    } else if (pos == 1) {
+      setInfo("Typing");
+    }
+  }, [pos]);
+
   // defTyping();
   const typingEvent = (e: any) => {
     setCurrent(e.key);
     const p: number = ref.current ?? 0;
 
-    console.log(`(k, target, pos) = (${e.key}, ${sentence[pos]}, ${pos})`);
+    setInfo(`(key, target, pos) = (${e.key}, ${sentence[p]}, ${p})`);
 
     if (e.key == "Enter" || e.key == "Shift" || e.key == "Control") {
       return;
@@ -103,13 +112,7 @@ function TypingGame({ params: { problemId } }: PageProps) {
   return (
     <div className="w-2/3 mx-auto mt-4 flex flex-col gap-4 text-white">
       <div className="p-4 border-2 border-slate-600 rounded-md">
-        <p className="text-xl flex gap-4">
-          <span className="border-2 px-2 rounded-md">current: {current}</span>
-          <span className="border-2 px-2 rounded-md">
-            Target: {sentence[pos]}
-          </span>
-          <span className="border-2 px-3 py-1 rounded-md">Position: {pos}</span>
-        </p>
+        <p className="text-xl flex gap-4">{info}</p>
       </div>
 
       <div className="p-4 border-2 border-slate-300 rounded-md">

@@ -1,7 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter
-from fastapi import Depends
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -18,8 +17,13 @@ async def all_records(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/records/{record_id}")
-async def all_records(record_id: int, db: AsyncSession = Depends(get_db)):
+async def record_by_id(record_id: int, db: AsyncSession = Depends(get_db)):
     return await record_crud.get_record(db, record_id)
+
+
+@router.get("/records/problems/{problem_id}", response_model=List[record_schema.Record])
+async def record_by_problem_id(problem_id: int, db: AsyncSession = Depends(get_db)):
+    return await record_crud.get_records_by_problem_id(db, problem_id)
 
 
 @router.post("/records", response_model=record_schema.RecordCreateResponse)

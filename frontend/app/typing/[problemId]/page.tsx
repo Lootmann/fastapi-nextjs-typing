@@ -2,7 +2,12 @@
 
 import React from "react";
 import parse from "html-react-parser";
-import { Problem } from "../../../typings";
+import { Ubuntu_Mono } from "@next/font/google";
+
+const font = Ubuntu_Mono({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 type PageProps = {
   params: {
@@ -21,7 +26,6 @@ function TypingGame({ params: { problemId } }: PageProps) {
 
   // manage to sentence, EventListener loading order.
   const [isDone, setIsDone] = React.useState<boolean>(false);
-  const [isDup, setIsDup] = React.useState(false);
 
   // for debug
   const [current, setCurrent] = React.useState<string>("");
@@ -44,7 +48,6 @@ function TypingGame({ params: { problemId } }: PageProps) {
   React.useEffect(() => {
     // adjust fetch order
     if (!isDone) return;
-    setIsDup(true);
     console.log("*** ref.current");
 
     window.addEventListener("keydown", (e: any) => typingEvent(e));
@@ -57,19 +60,43 @@ function TypingGame({ params: { problemId } }: PageProps) {
   // defTyping();
   const typingEvent = (e: any) => {
     setCurrent(e.key);
-    const p = ref.current;
+    const p: number = ref.current ?? 0;
+
     console.log(`(k, target, pos) = (${e.key}, ${sentence[pos]}, ${pos})`);
 
+    if (e.key == "Enter" || e.key == "Shift" || e.key == "Control") {
+      return;
+    }
+
     if (e.key == sentence[p]) {
-      console.log("Hit that");
+      // make text white
       let updated = "<span classname='text-2xl text-white'>";
       updated += sentence.slice(0, p + 1);
       updated += "</span>";
-      updated += sentence.slice(p + 1);
+
+      // underline
+      updated +=
+        "<span className='text-2xl underline underline-offset-8 decoration-slate-50'>";
+      updated += sentence.slice(p + 1, p + 2);
+      updated += "</span>";
+
+      updated += sentence.slice(p + 2);
       setShowSentence(updated);
 
-      // not working
       setPos((prev) => prev + 1);
+    } else {
+      let wrong = "<span classname='text-2xl text-white'>";
+      wrong += sentence.slice(0, p);
+      wrong += "</span>";
+
+      // wrong word has fonr: red color.
+      wrong +=
+        "<span className='text-2xl text-red-400 underline underline-offset-8 decoration-slate-50'>";
+      wrong += sentence.slice(p, p + 1);
+      wrong += "</span>";
+
+      wrong += sentence.slice(p + 1);
+      setShowSentence(wrong);
     }
   };
 
@@ -86,7 +113,9 @@ function TypingGame({ params: { problemId } }: PageProps) {
       </div>
 
       <div className="p-4 border-2 border-slate-300 rounded-md">
-        <p className="text-2xl text-slate-500">{parse(showSentence)}</p>
+        <p className={`${font.className} text-2xl text-slate-500 break-words`}>
+          {parse(showSentence)}
+        </p>
       </div>
     </div>
   );

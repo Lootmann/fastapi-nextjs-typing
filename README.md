@@ -2,11 +2,9 @@
 
 タイピングゲーム
 
+色々やろうとして時間がかかりすぎ
 
-## Features
-
-- 過去のタイピング記録を残しておく
-  - パフォーマンスが時系列的にどれのくらい上がったのかを分析
+とりあえずタイピングは出来るようになったので終了
 
 
 ## Backend
@@ -42,9 +40,9 @@ class Problem(BaseModel):
 
 class Record(BaseModel):
     id: int
-    actual_typing: str
     duration: int
     registered_at: datetime
+    problem_id: int
 ```
 
 
@@ -61,9 +59,9 @@ CREATE TABLE problems (
 -- sqlite> .schema records
 CREATE TABLE records (
         id INTEGER NOT NULL,
-        actual_typing VARCHAR(9999),
         duration INTEGER,
         registered_at DATETIME,
+        problem_id INTEGER,
         PRIMARY KEY (id)
 );
 ```
@@ -71,7 +69,6 @@ CREATE TABLE records (
 
 ## Frontend
 
-- [ ] Nextjs
-  - [ ] Routing
-- [ ] Tailwindcss
-- [ ] Axios
+- [x] Nextjs
+  - [x] Routing
+- [x] Tailwindcss
